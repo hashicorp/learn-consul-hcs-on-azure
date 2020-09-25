@@ -3,10 +3,6 @@
 ## Prerequisites
 
 - Your own Azure subscription
-- A resource group that contains all following resources
-  - An AKS Cluster
-  - A HashiCorp Consul Service on Azure Datacenter with a public endpoint enabled
-  - A VNet
 - The following binaries installed on the development host
   - jq
   - kubectl 1.18.0+
@@ -29,6 +25,22 @@
 ## Set an environment variable for your resource group name
 
 `export RESOURCE_GROUP=<your-resource-group-name> && echo $RESOURCE_GROUP`
+
+## Create a resource group
+
+`az group create -l westus2 -n $RESOURCE_GROUP`
+
+## Create an AKS cluster (this may take up to 10 minutes)
+
+`az aks create -g $RESOURCE_GROUP -n $RESOURCE_GROUP-aks`
+
+## Create an HCS Datacenter (This may take up to 15 minutes)
+
+`az hcs create -g $RESOURCE_GROUP --name $RESOURCE_GROUP-managed-hcs --datacenter-name dc1 --email your@email.com --external-endpoint enabled`
+
+## Create a VNet
+
+`az network vnet create -g $RESOURCE_GROUP -n $RESOURCE_GROUP-vnet`
 
 ## Confirm your resources
 
